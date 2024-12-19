@@ -1,7 +1,20 @@
 import Imap from 'node-imap';
 import { simpleParser } from 'mailparser';
+import sqlite3 from 'sqlite3';
 
-const combo = 'email@gmail.com:password'
+const db = new sqlite3.Database('database.db');
+const combo = await new Promise((resolve, reject) => {
+    db.get('SELECT * FROM users', (err, row) => {
+        if (err) {
+            console.log('error getting user', err);
+            reject();
+        }
+
+        resolve(`${row.email}:${row.password}`);
+    });
+});
+
+console.log({ combo })
 
 const [email, password] = combo.split(':')
 
