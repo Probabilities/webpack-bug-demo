@@ -7,17 +7,20 @@ const config = `{
         filename: 'webpack-output.js',
         path: '${path.resolve('webpack-output').replace(/\\/g, '\\\\')}',
     },
+    optimization: {
+        minimizer: [false]
+    },
     module: {
         rules: [
             {
-                test: /.node$/,
+                test: /\\.node$/,
                 loader: 'node-loader',
             },
         ],
     },
     externals: [
         ({ context, request }, callback) => {
-            if (/.node$/.test(request)) {
+            if (/\\.node$/.test(request)) {
                 return callback(null, 'commonjs ' + request);
             }
             callback();
